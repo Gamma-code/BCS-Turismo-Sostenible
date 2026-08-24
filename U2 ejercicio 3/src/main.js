@@ -1,7 +1,7 @@
 import Router from "./router/router.js";
 import HomeView from "./views/HomeView.js";
 import AboutView from "./views/AboutView.js";
-import ItemDetailView from "./views/ItemDetailView.js";
+import DestinoDetailView from "./views/DestinoDetailView.js";
 
 // La ruta "/item/:id" ya está registrada aquí, pero el Router todavía
 // no sabe hacer match con rutas dinámicas (ver TODO en router.js).
@@ -12,8 +12,9 @@ import ItemDetailView from "./views/ItemDetailView.js";
 const routes = [
   { path: "/", view: HomeView },
   { path: "/acerca", view: AboutView },
-  { path: "/item/:id", view: ItemDetailView },
+  { path: "/destino/:id", view: DestinoDetailView },
 ];
+
 
 const app = document.getElementById("app");
 const router = new Router(routes, app);

@@ -1,16 +1,16 @@
-import ItemsService from "../services/itemsService.js";
-import ItemCard from "../components/ItemCard.js";
+import { DESTINOS } from "../services/destinosData.js";
+import DestinoCard from "../components/DestinoCard.js";
 
-// TODO: si renombraste "item" a algo de tu tema, ajusta también
-// el título de esta vista.
 export default async function HomeView() {
-  const service = new ItemsService();
-  const items = await service.getAll();
-
   return `
-    <h2>Elementos disponibles</h2>
+    <h2>Destinos turísticos sostenibles de Baja California Sur</h2>
+    <p class="subtitle">
+      Información centralizada sobre los principales destinos naturales,
+      históricos y recreativos del estado, pensada para promover un
+      turismo responsable.
+    </p>
     <div class="grid">
-      ${items.map((item) => ItemCard(item)).join("")}
+      ${DESTINOS.map((destino) => DestinoCard(destino)).join("")}
     </div>
   `;
 }

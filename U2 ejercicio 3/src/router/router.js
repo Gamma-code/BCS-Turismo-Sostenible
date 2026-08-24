@@ -37,13 +37,42 @@ export default class Router {
    *   matchRoute("/item/2") -> { route: <ruta /item/:id>, params: { id: "2" } }
    */
   matchRoute(path) {
-    const route = this.routes.find((r) => r.path === path);
-    if (!route) return null;
-    return { route, params: {} };
+    for (const route of this.routes) {
+      const paramNames = [];
+
+      const pattern = route.path
+        .split("/")
+        .map((segment) => {
+          if (segment.startsWith(":")) {
+            paramNames.push(segment.slice(1));
+            return "([^/]+)";
+          }
+          return segment;
+        })
+        .join("/");
+
+      const regex = new RegExp(`^${pattern}$`);
+      const match = path.match(regex);
+
+      if (match) {
+        const params = {};
+        paramNames.forEach((name, index) => {
+          params[name] = decodeURIComponent(match[index + 1]);
+        });
+        return { route, params };
+      }
+    }
+
+    return null;
   }
 
   async render() {
-    const path = window.location.pathname;
+    
+    let path = window.location.pathname;
+    if (path.endsWith("/index.html")) {
+      path = path.slice(0, -"index.html".length) || "/";
+    }
+
     const match = this.matchRoute(path);
 
     if (!match) {
@@ -56,7 +85,7 @@ export default class Router {
 
     const html = await match.route.view(match.params);
     this.root.innerHTML = html;
-    document.title = `Mi Catálogo — ${path}`;
+    document.title = `BCS Turismo Sostenible — ${path}`;
   }
 
   init() {

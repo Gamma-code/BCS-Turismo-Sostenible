@@ -15,6 +15,12 @@
 //   import { slugify } from "../utils/slugify.js";
 
 export function slugify(text) {
-  // Implementación pendiente: por ahora solo devuelve el texto tal cual.
-  return text;
+  return text
+    .normalize("NFD") // separa letras de sus acentos 
+    .replace(/[\u0300-\u036f]/g, "") 
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, "") // quita signos de puntuación
+    .replace(/\s+/g, "-") // espacios -> guiones
+    .replace(/-+/g, "-"); // guiones repetidos
 }

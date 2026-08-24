@@ -12,39 +12,14 @@
 // Ejemplo si tu tema fuera "recetas":
 //   { id: "1", title: "Tacos al pastor", description: "...", meta: "30 min" }
 
-const ITEMS = [
-  {
-    id: "1",
-    title: "Elemento de ejemplo uno",
-    description: "Descripción corta del primer elemento de tu catálogo.",
-    meta: "Dato extra (ej. duración, precio, categoría...)",
-  },
-  {
-    id: "2",
-    title: "Elemento de ejemplo dos",
-    description: "Descripción corta del segundo elemento de tu catálogo.",
-    meta: "Dato extra",
-  },
-  {
-    id: "3",
-    title: "Elemento de ejemplo tres",
-    description: "Descripción corta del tercer elemento de tu catálogo.",
-    meta: "Dato extra",
-  },
-  {
-    id: "4",
-    title: "Elemento de ejemplo cuatro",
-    description: "Descripción corta del cuarto elemento de tu catálogo.",
-    meta: "Dato extra",
-  },
-];
+import { DESTINOS } from "./destinosData.js";
 
-export default class ItemsService {
+export default class DestinosService {
   async getAll() {
-    return ITEMS;
+    return DESTINOS;
   }
 
   async getById(id) {
-    return ITEMS.find((item) => item.id === id) ?? null;
+    return DESTINOS.find((destino) => destino.id === id) ?? null;
   }
 }
