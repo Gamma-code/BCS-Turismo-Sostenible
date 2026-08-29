@@ -83,6 +83,16 @@ export default class Router {
       return;
     }
 
+    // skeleton 
+    this.root.innerHTML = `
+      <div class="skeleton">
+        <div class="skeleton-line"></div>
+        <div class="skeleton-line"></div>
+        <div class="skeleton-line short"></div>
+      </div>
+    `;
+
+    await new Promise((r) => setTimeout(r, 200));
     const html = await match.route.view(match.params);
     this.root.innerHTML = html;
     document.title = `BCS Turismo Sostenible — ${path}`;
