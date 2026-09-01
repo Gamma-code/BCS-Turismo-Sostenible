@@ -17,6 +17,7 @@ export default async function DestinoDetailView(params) {
     `;
   }
 
+
   const { default: WeatherService } = await import(
     "../services/weatherService.js"
   );
@@ -33,7 +34,31 @@ export default async function DestinoDetailView(params) {
       </div>
     `;
   } catch (e) {
-    climaHTML = `<p class="clima-error">No se pudo cargar el clima: ${e.message}</p>`;
+    
+    
+    console.error("Error al obtener el clima: ", e);
+    // Aqui se imprimen los mensajes de error 
+    let mensaje;
+    if (e.name === "AbortError") {
+      // El servidor tardó demasiado y AbortController canceló la petición.
+      mensaje =
+        "El clima está tardando demasiado en responder. Intenta de nuevo en unos segundos.";
+    } else if (e instanceof TypeError) {
+      // Falló la conexión misma: sin red, DNS, o bloqueo por CORS.
+      mensaje =
+        "No hay conexión con el servicio de clima (revisa tu internet o inténtalo más tarde).";
+    } else {
+      // La petición llegó al servidor, pero este respondió con error
+      // (por ejemplo, un status 4xx/5xx).
+      mensaje = `El servicio de clima respondió con un error: ${e.message}`;
+    }
+
+    climaHTML = `
+      <div class="clima clima-error">
+        <h3>Clima actual</h3>
+        <p>⚠️ ${mensaje}</p>
+      </div>
+    `;
   }
 
   return `
