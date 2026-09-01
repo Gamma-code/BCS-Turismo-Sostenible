@@ -1,1 +1,1 @@
-export const BASE_PATH = "/BCS-Turismo-Sostenible/u2-ejercicio-3";
+export const BASE_PATH = "/BCS-Turismo-Sostenible/U2 ejercicio 3";

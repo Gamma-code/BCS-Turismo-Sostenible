@@ -69,11 +69,9 @@ export default class Router {
   }
 
   async render() {
-    let path = decodeURIComponent(window.location.pathname);
+    const fullPath = decodeURIComponent(window.location.pathname);
+    let path = fullPath.replace(BASE_PATH, "") || "/";
 
-    if (this.basePath && path.startsWith(this.basePath)) {
-      path = path.slice(this.basePath.length);
-    }
     if (path.endsWith("/index.html")) {
       path = path.slice(0, -"index.html".length) || "/";
     }
