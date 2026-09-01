@@ -5,11 +5,12 @@
  * TODO (Ejercicio - Parte A, punto 1): agrega soporte para rutas con
  * parámetros, como "/item/:id", dentro de matchRoute().
  */
+import { BASE_PATH } from "../config.js";
+
 export default class Router {
-  constructor(routes, rootElement, basePath = "") {
+  constructor(routes, rootElement) {
     this.routes = routes;
     this.root = rootElement;
-    this.basePath = basePath.replace(/\/$/, ""); 
 
     window.addEventListener("popstate", () => this.render());
 
@@ -22,7 +23,7 @@ export default class Router {
   }
 
   navigate(path) {
-    window.history.pushState({}, "", this.basePath + path);
+    window.history.pushState({}, "", path);
     this.render();
   }
 
@@ -37,7 +38,7 @@ export default class Router {
    * parámetros capturados, ej:
    *   matchRoute("/item/2") -> { route: <ruta /item/:id>, params: { id: "2" } }
    */
-  matchRoute(path) {
+   matchRoute(path) {
     for (const route of this.routes) {
       const paramNames = [];
 

@@ -1,0 +1,1 @@
+export const BASE_PATH = "/BCS-Turismo-Sostenible/u2-ejercicio-3";
