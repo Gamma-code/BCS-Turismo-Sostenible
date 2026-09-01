@@ -51,6 +51,23 @@ article.card p {
   font-size: 0.95rem;
 }
 
+.clima {
+  margin: 1rem 0;
+  padding: 1rem;
+  border-radius: var(--radius);
+  background: #eef2ff;
+}
+
+.clima h3 {
+  font-size: 1rem;
+  margin: 0 0 0.4rem;
+}
+
+.clima-error {
+  color: #b91c1c;
+  font-size: 0.9rem;
+}
+
 /* Breakpoint tablet (≥640px): grid pasa a 2 columnas */
 @media (min-width: 640px) {
   .grid {

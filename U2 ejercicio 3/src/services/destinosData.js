@@ -1,6 +1,3 @@
-
-
-
 export const DESTINOS = [
   {
     id: "1",
@@ -12,6 +9,8 @@ export const DESTINOS = [
     horario: "Tours de día completo, octubre a junio",
     recomendacion:
       "Visitar únicamente con guías certificados y mantener distancia con la fauna marina.",
+    lat: 24.48,
+    lon: -110.35,
   },
   {
     id: "2",
@@ -23,6 +22,8 @@ export const DESTINOS = [
     horario: "8:00 a 18:00 hrs, aforo limitado",
     recomendacion:
       "No usar bloqueador solar convencional; llevar bolsa para tu propia basura.",
+    lat: 24.318,
+    lon: -110.323,
   },
   {
     id: "3",
@@ -34,6 +35,8 @@ export const DESTINOS = [
     horario: "Visitas guiadas registradas ante el INAH",
     recomendacion:
       "No tocar las pinturas ni retirar piedras; contratar guías locales de la comunidad.",
+    lat: 27.535,
+    lon: -112.965,
   },
   {
     id: "4",
@@ -45,6 +48,8 @@ export const DESTINOS = [
     horario: "Buceo y esnórquel, todo el año (mejor visibilidad jun-oct)",
     recomendacion:
       "Elegir operadores certificados en buenas prácticas de buceo responsable.",
+    lat: 23.4406,
+    lon: -109.4192,
   },
   {
     id: "5",
@@ -56,5 +61,7 @@ export const DESTINOS = [
     horario: "Recorridos peatonales, todo el año",
     recomendacion:
       "Apoyar comercios y artesanos locales; moverse a pie o en bicicleta dentro del centro.",
+    lat: 23.4483,
+    lon: -110.2242,
   },
 ];
