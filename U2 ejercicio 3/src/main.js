@@ -15,8 +15,11 @@ const routes = [
   { path: "/destino/:id", view: DestinoDetailView },
 ];
 
+// Prefijo real donde vive tu app en GitHub Pages.
+// Ajusta esto según el nombre de tu repo y de tu carpeta.
+const BASE_PATH = "/BCS-Turismo-Sostenible/U2 ejercicio 3";
 
 const app = document.getElementById("app");
-const router = new Router(routes, app);
+const router = new Router(routes, app, BASE_PATH);
 
 router.init();

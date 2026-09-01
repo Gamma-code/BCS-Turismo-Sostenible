@@ -6,9 +6,10 @@
  * parámetros, como "/item/:id", dentro de matchRoute().
  */
 export default class Router {
-  constructor(routes, rootElement) {
+  constructor(routes, rootElement, basePath = "") {
     this.routes = routes;
     this.root = rootElement;
+    this.basePath = basePath.replace(/\/$/, ""); 
 
     window.addEventListener("popstate", () => this.render());
 
@@ -21,7 +22,7 @@ export default class Router {
   }
 
   navigate(path) {
-    window.history.pushState({}, "", path);
+    window.history.pushState({}, "", this.basePath + path);
     this.render();
   }
 
@@ -67,11 +68,15 @@ export default class Router {
   }
 
   async render() {
-    
-    let path = window.location.pathname;
+    let path = decodeURIComponent(window.location.pathname);
+
+    if (this.basePath && path.startsWith(this.basePath)) {
+      path = path.slice(this.basePath.length);
+    }
     if (path.endsWith("/index.html")) {
       path = path.slice(0, -"index.html".length) || "/";
     }
+    if (path === "") path = "/";
 
     const match = this.matchRoute(path);
 
