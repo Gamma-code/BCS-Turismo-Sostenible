@@ -6,6 +6,18 @@
   <title>BCS Turismo Sostenible</title>
  <link rel="stylesheet" href="styles/shell.css" />
   <link rel="stylesheet" href="styles/main.css" />
+  <script>
+    // Tema claro y oscuro
+    
+    try {
+      const temaGuardado = window.localStorage.getItem("bcs_theme");
+      if (temaGuardado) {
+        document.documentElement.setAttribute("data-theme", temaGuardado);
+      }
+    } catch (e) {
+      
+    }
+  </script>
 </head>
 <body>
   <header>
@@ -13,6 +25,8 @@
     <nav>
      <a href="/BCS-Turismo-Sostenible/U2 ejercicio 3" data-link>Inicio</a>
      <a href="/BCS-Turismo-Sostenible/U2 ejercicio 3/acerca" data-link>Acerca de</a>
+     <a href="/BCS-Turismo-Sostenible/U2 ejercicio 3/diagnostico" data-link>Diagnóstico</a>
+     <button id="theme-toggle" type="button" aria-pressed="false">🌙 Modo oscuro</button>
     </nav>
   </header>
 

@@ -6,14 +6,27 @@
   --color-primary: #1e2761;
   --color-bg: #f7f8fb;
   --color-nav-link: #cadcfc;
+  --color-card-bg: #ffffff;
+  --color-text: #1e2761;
   --radius: 0.6rem;
+}
+
+/*Tema oscuro (persistido en localStorage vía themeService.js) 
+   Se activa poniendo data-theme="oscuro" en <html> (ver themeService.js). */
+:root[data-theme="oscuro"] {
+  --color-primary: #cadcfc;
+  --color-bg: #12172b;
+  --color-nav-link: #ffffff;
+  --color-card-bg: #1c2340;
+  --color-text: #e7ebff;
 }
 
 body {
   font-family: system-ui, sans-serif;
   margin: 0;
-  color: var(--color-primary);
+  color: var(--color-text);
   background: var(--color-bg);
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 header {
@@ -92,6 +105,7 @@ footer {
 
   nav {
     flex-direction: row;
+    align-items: center;
     gap: 1.2rem;
   }
 }

@@ -1,25 +1,97 @@
 import Router from "./router/router.js";
-import HomeView from "./views/HomeView.js";
+import HomeView, { filtrarDestinos } from "./views/HomeView.js";
 import AboutView from "./views/AboutView.js";
 import DestinoDetailView from "./views/DestinoDetailView.js";
+import DiagnosticoView, { leerEstadoStorage } from "./views/DiagnosticoView.js";
+import DestinoCard from "./components/DestinoCard.js";
 
-// La ruta "/item/:id" ya está registrada aquí, pero el Router todavía
-// no sabe hacer match con rutas dinámicas (ver TODO en router.js).
-//
-// TODO: si renombraste tu entidad (ej. "receta"), puedes
-// cambiar aquí el path a algo como "/receta/:id" — solo asegúrate de
-// que coincida con los enlaces generados en ItemCard.js.
+import { initTheme, toggleTheme } from "./services/themeService.js";
+import { registrarVisita } from "./services/visitasService.js";
+import {
+  sessionStorageSafe,
+  localStorageSafe,
+  deleteCookie,
+} from "./services/storageService.js";
+import { VISITAS_KEY, ULTIMA_VISITA_KEY } from "./services/visitasService.js";
+
 const routes = [
   { path: "/", view: HomeView },
   { path: "/acerca", view: AboutView },
   { path: "/destino/:id", view: DestinoDetailView },
+  { path: "/diagnostico", view: DiagnosticoView },
 ];
 
-// Prefijo real donde vive tu app en GitHub Pages.
-// Ajusta esto según el nombre de tu repo y de tu carpeta.
+
 const BASE_PATH = "/BCS-Turismo-Sostenible/U2 ejercicio 3";
 
 const app = document.getElementById("app");
 const router = new Router(routes, app, BASE_PATH);
 
+
+initTheme();
+
+registrarVisita();
+
 router.init();
+
+// Botón de tema en el header (fijo en index.html/404.html, no lo
+// pinta el router, así que se conecta una sola vez aquí) 
+const themeButton = document.getElementById("theme-toggle");
+if (themeButton) {
+  themeButton.addEventListener("click", () => toggleTheme());
+}
+
+//Filtro de destinos (sessionStorage) y el Diagnóstico 
+
+
+const FILTRO_KEY = "bcs_filtro_destinos";
+
+document.addEventListener("input", (event) => {
+  if (event.target.id !== "destino-filtro") return;
+
+  const termino = event.target.value;
+  sessionStorageSafe.set(FILTRO_KEY, termino);
+
+  const grid = document.getElementById("destinos-grid");
+  if (!grid) return;
+
+  const resultados = filtrarDestinos(termino);
+  grid.innerHTML = resultados.length
+    ? resultados.map((destino) => DestinoCard(destino)).join("")
+    : `<p class="sin-resultados">No hay destinos que coincidan con "${termino}".</p>`;
+});
+
+document.addEventListener("click", (event) => {
+  const boton = event.target.closest("[data-diag-clear]");
+  if (!boton) return;
+
+  const tipo = boton.dataset.diagClear; // "theme" | "filtro" | "visitas"
+
+  if (tipo === "theme") {
+    localStorageSafe.remove("bcs_theme");
+    document.documentElement.setAttribute("data-theme", "claro");
+    if (themeButton) {
+      themeButton.textContent = "🌙 Modo oscuro";
+      themeButton.setAttribute("aria-pressed", "false");
+    }
+  } else if (tipo === "filtro") {
+    sessionStorageSafe.remove(FILTRO_KEY);
+  } else if (tipo === "visitas") {
+    deleteCookie(VISITAS_KEY);
+    deleteCookie(ULTIMA_VISITA_KEY);
+  }
+
+  actualizarDiagnostico();
+});
+
+function actualizarDiagnostico() {
+  const themeValue = document.getElementById("diag-theme-value");
+  if (!themeValue) return; // no estamos en la vista de diagnóstico
+
+  const estado = leerEstadoStorage();
+  themeValue.textContent = estado.tema;
+  document.getElementById("diag-filtro-value").textContent = estado.filtro ?? "(vacío)";
+  document.getElementById("diag-visitas-value").textContent = estado.visitas ?? "(vacío)";
+  document.getElementById("diag-ultima-visita-value").textContent = estado.ultimaVisita ?? "(vacío)";
+  
+}

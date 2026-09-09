@@ -14,7 +14,7 @@
 
 /* ===== Card (se usa en Home, Detalle y Acerca de) ===== */
 .card {
-  background: white;
+  background: var(--color-card-bg);
   border-radius: var(--radius);
   padding: 1.25rem;
   box-shadow: 0 0.15rem 0.5rem rgba(0, 0, 0, 0.08);
@@ -78,6 +78,129 @@ article.card p {
 /* Breakpoint desktop (≥1024px): grid pasa a 3 columnas */
 @media (min-width: 1024px) {
   .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ===== Botón de tema (header) ===== */
+#theme-toggle {
+  background: transparent;
+  border: 1px solid var(--color-nav-link);
+  color: var(--color-nav-link);
+  border-radius: var(--radius);
+  padding: 0.35rem 0.7rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+#theme-toggle:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ===== Barra de filtro (Home) ===== */
+.filtro-bar {
+  margin-bottom: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.filtro-bar label {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.filtro-bar input {
+  padding: 0.5rem 0.7rem;
+  border-radius: var(--radius);
+  border: 1px solid #d1d5db;
+  font-size: 0.95rem;
+}
+
+.filtro-bar small {
+  color: #6b7280;
+  font-size: 0.75rem;
+}
+
+.sin-resultados {
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+/* ===== Vista de diagnóstico ===== */
+.storage-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.storage-card .storage-meta {
+  color: #6b7280;
+  font-size: 0.8rem;
+}
+
+.storage-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.storage-actions button,
+.btn-secundario {
+  border-radius: var(--radius);
+  border: 1px solid var(--color-primary);
+  background: var(--color-primary);
+  color: white;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.btn-secundario {
+  background: transparent;
+  color: var(--color-primary);
+}
+
+.storage-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.storage-table th,
+.storage-table td {
+  text-align: left;
+  padding: 0.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* ===== Toast de avisos de storage (no bloqueante) ===== */
+#storage-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 1.25rem;
+  transform: translate(-50%, 1rem);
+  background: #1e2761;
+  color: white;
+  padding: 0.75rem 1.1rem;
+  border-radius: var(--radius);
+  font-size: 0.85rem;
+  max-width: 90vw;
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.25);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 100;
+}
+
+#storage-toast.storage-toast--visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+@media (min-width: 640px) {
+  .storage-grid {
     grid-template-columns: repeat(3, 1fr);
   }
 }
