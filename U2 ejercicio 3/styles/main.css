@@ -204,3 +204,77 @@ article.card p {
     grid-template-columns: repeat(3, 1fr);
   }
 }
+
+
+/* MI LISTA DE VIAJE (IndexedDB) */
+
+.guardado-form label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-top: 0.75rem;
+}
+
+.guardado-form select,
+.guardado-form input,
+#estado-filtro {
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.25rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.4rem;
+  font-size: 0.9rem;
+}
+
+.guardado-form .storage-actions {
+  margin-top: 1rem;
+}
+
+.guardados-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.guardado-card {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+.guardado-card h4 {
+  margin: 0.5rem 0 0.4rem;
+  font-size: 1rem;
+}
+
+.guardado-card p {
+  font-size: 0.9rem;
+  margin: 0 0 0.5rem;
+}
+
+.guardado-estado {
+  display: inline-block;
+  background: var(--color-primary);
+  color: white;
+  font-size: 0.75rem;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+}
+
+.guardado-fecha {
+  color: #6b7280;
+  font-size: 0.8rem;
+}
+
+.lista-vacia {
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+@media (min-width: 640px) {
+  .guardados-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

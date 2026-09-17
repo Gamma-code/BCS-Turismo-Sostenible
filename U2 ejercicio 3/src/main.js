@@ -3,6 +3,7 @@ import HomeView, { filtrarDestinos } from "./views/HomeView.js";
 import AboutView from "./views/AboutView.js";
 import DestinoDetailView from "./views/DestinoDetailView.js";
 import DiagnosticoView, { leerEstadoStorage } from "./views/DiagnosticoView.js";
+import MiListaView from "./views/MiListaView.js";
 import DestinoCard from "./components/DestinoCard.js";
 
 import { initTheme, toggleTheme } from "./services/themeService.js";
@@ -19,6 +20,7 @@ const routes = [
   { path: "/acerca", view: AboutView },
   { path: "/destino/:id", view: DestinoDetailView },
   { path: "/diagnostico", view: DiagnosticoView },
+    { path: "/mi-lista", view: MiListaView },
 ];
 
 
