@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BCS Turismo Sostenible</title>
+  <link rel="stylesheet" href="/BCS-Turismo-Sostenible/U2%20ejercicio%203/styles/shell.css" />
+  <link rel="stylesheet" href="/BCS-Turismo-Sostenible/U2%20ejercicio%203/styles/main.css" />
+  <script>
+    
+    try {
+      const temaGuardado = window.localStorage.getItem("bcs_theme");
+      if (temaGuardado) {
+        document.documentElement.setAttribute("data-theme", temaGuardado);
+      }
+    } catch (e) {
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>BCS Turismo Sostenible</h1>
+    <nav>
+     <a href="/BCS-Turismo-Sostenible/U2 ejercicio 3" data-link>Inicio</a>
+     <a href="/BCS-Turismo-Sostenible/U2 ejercicio 3/acerca" data-link>Acerca de</a>
+     <a href="/BCS-Turismo-Sostenible/U2 ejercicio 3/diagnostico" data-link>Diagnóstico</a>
+     <a href="/BCS-Turismo-Sostenible/U2 ejercicio 3/mi-lista" data-link>Mi lista</a>
+     <button id="theme-toggle" type="button" aria-pressed="false">🌙 Modo oscuro</button>
+    </nav>
+  </header>
+
+  <main id="app">Cargando...</main>
+
+  <footer>
+    <p>Plataforma de información turística sostenible de Baja California Sur</p>
+  </footer>
+
+  <script type="module" src="/BCS-Turismo-Sostenible/U2%20ejercicio%203/src/main.js"></script>
+</body>
+</html>
