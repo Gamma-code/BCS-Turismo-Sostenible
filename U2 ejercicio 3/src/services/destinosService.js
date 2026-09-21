@@ -1,25 +1,46 @@
-// Servicio "mock": simula una fuente de datos (podría ser un fetch real
-// a una API). Exportación por defecto a propósito: la importarás de
-// forma DINÁMICA en ItemDetailView.js.
-//
-// ── TODO ─────────────────────────────────────────────
-// Reemplaza el arreglo ITEMS por los datos de tu propio tema (mínimo 4
-// elementos, mínimo 3 campos cada uno). Puedes renombrar "ItemsService"
-// y "Item" si quieres (ej. RecetasService / Receta), pero no es
-// obligatorio: lo que se califica son los datos y los campos, no el
-// nombre de la clase.
-//
-// Ejemplo si tu tema fuera "recetas":
-//   { id: "1", title: "Tacos al pastor", description: "...", meta: "30 min" }
-
+import { API_URL } from "../config.js";
 import { DESTINOS } from "./destinosData.js";
+
+const TIMEOUT_MS = 8000;
+
+// Pide datos al backend, si tarda demasiado aborta la petición
+async function pedirAlBackend(ruta) {
+  const controlador = new AbortController();
+  const temporizador = setTimeout(() => controlador.abort(), TIMEOUT_MS);
+
+  try {
+    const response = await fetch(`${API_URL}${ruta}`, {
+      signal: controlador.signal,
+    });
+
+    if (!response.ok) {
+      throw new Error(`El servidor respondió ${response.status}`);
+    }
+
+    return await response.json();
+  } finally {
+    clearTimeout(temporizador);
+  }
+}
 
 export default class DestinosService {
   async getAll() {
-    return DESTINOS;
+    try {
+      return await pedirAlBackend("/destinos");
+    } catch (error) {
+      // El plan gratuito del servidor se petatea, usamos los datos locales
+      // para que la app siga funcionando en lugar de quedarse vacía
+      console.warn("Backend no disponible, usando datos locales:", error.message);
+      return DESTINOS;
+    }
   }
 
   async getById(id) {
-    return DESTINOS.find((destino) => destino.id === id) ?? null;
+    try {
+      return await pedirAlBackend(`/destinos/${id}`);
+    } catch (error) {
+      console.warn("Backend no disponible, usando datos locales:", error.message);
+      return DESTINOS.find((destino) => destino.id === id) ?? null;
+    }
   }
 }

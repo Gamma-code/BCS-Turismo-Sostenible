@@ -1,16 +1,17 @@
-import { DESTINOS } from "../services/destinosData.js";
+import DestinosService from "../services/destinosService.js";
 import DestinoCard from "../components/DestinoCard.js";
 import { sessionStorageSafe } from "../services/storageService.js";
 
 // Filtro de búsqueda: dato temporal de flujo de trabajo.
 
 const FILTRO_KEY = "bcs_filtro_destinos";
+let destinosCargados = [];
 
 export function filtrarDestinos(termino) {
   const texto = termino.trim().toLowerCase();
-  if (!texto) return DESTINOS;
+  if (!texto) return destinosCargados;
 
-  return DESTINOS.filter((destino) =>
+  return destinosCargados.filter((destino) =>
     `${destino.title} ${destino.meta} ${destino.ubicacion}`
       .toLowerCase()
       .includes(texto)
@@ -19,6 +20,10 @@ export function filtrarDestinos(termino) {
 
 export default async function HomeView() {
   const filtroGuardado = sessionStorageSafe.get(FILTRO_KEY) ?? "";
+
+  const service = new DestinosService();
+  destinosCargados = await service.getAll();
+
   const destinosFiltrados = filtrarDestinos(filtroGuardado);
 
   return `
