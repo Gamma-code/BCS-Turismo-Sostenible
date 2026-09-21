@@ -4,7 +4,9 @@ import AboutView from "./views/AboutView.js";
 import DestinoDetailView from "./views/DestinoDetailView.js";
 import DiagnosticoView, { leerEstadoStorage } from "./views/DiagnosticoView.js";
 import MiListaView from "./views/MiListaView.js";
+import ServiceWorkerView from "./views/ServiceWorkerView.js";
 import DestinoCard from "./components/DestinoCard.js";
+import { registerServiceWorker } from "./pwa/registerSW.js";
 
 import { initTheme, toggleTheme } from "./services/themeService.js";
 import { registrarVisita } from "./services/visitasService.js";
@@ -20,14 +22,13 @@ const routes = [
   { path: "/acerca", view: AboutView },
   { path: "/destino/:id", view: DestinoDetailView },
   { path: "/diagnostico", view: DiagnosticoView },
-    { path: "/mi-lista", view: MiListaView },
+  { path: "/mi-lista", view: MiListaView },
+  { path: "/service-worker", view: ServiceWorkerView },
 ];
 
 
-const BASE_PATH = "/BCS-Turismo-Sostenible/U2 ejercicio 3";
-
 const app = document.getElementById("app");
-const router = new Router(routes, app, BASE_PATH);
+const router = new Router(routes, app);
 
 
 initTheme();
@@ -35,6 +36,10 @@ initTheme();
 registrarVisita();
 
 router.init();
+
+//Se registra el Sw al terminar la carga de lapagina
+window.addEventListener("load", () => registerServiceWorker());
+
 
 // Botón de tema en el header (fijo en index.html/404.html, no lo
 // pinta el router, así que se conecta una sola vez aquí) 
