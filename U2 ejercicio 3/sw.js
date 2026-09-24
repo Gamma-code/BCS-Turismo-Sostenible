@@ -1,4 +1,4 @@
-const CACHE_VERSION = "bcs-app-shell-v1";
+   const CACHE_VERSION = "bcs-app-shell-v2";
 
 const APP_SHELL = [
   "./",
