@@ -7,7 +7,7 @@ import MiListaView from "./views/MiListaView.js";
 import ServiceWorkerView from "./views/ServiceWorkerView.js";
 import DestinoCard from "./components/DestinoCard.js";
 import { registerServiceWorker } from "./pwa/registerSW.js";
-
+import CacheLabView from "./views/CacheLabView.js";
 import { initTheme, toggleTheme } from "./services/themeService.js";
 import { registrarVisita } from "./services/visitasService.js";
 import {
@@ -24,6 +24,7 @@ const routes = [
   { path: "/diagnostico", view: DiagnosticoView },
   { path: "/mi-lista", view: MiListaView },
   { path: "/service-worker", view: ServiceWorkerView },
+  { path: "/cache", view: CacheLabView },
 ];
 
 
