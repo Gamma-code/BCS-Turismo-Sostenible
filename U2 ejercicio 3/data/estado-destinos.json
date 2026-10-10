@@ -1,0 +1,9 @@
+{
+  "actualizado": "2026-10-09",
+  "version": 1,
+  "estado": [
+    { "id": "2", "destino": "Playa Balandra", "aforo": "Disponible", "acceso": "Abierto" },
+    { "id": "4", "destino": "Cabo Pulmo", "aforo": "Medio", "acceso": "Abierto" },
+    { "id": "1", "destino": "Isla Espíritu Santo", "aforo": "Lleno", "acceso": "Solo con guía" }
+  ]
+}

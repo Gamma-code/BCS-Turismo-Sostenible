@@ -433,3 +433,9 @@ pre.sw-result {
   white-space: pre-wrap;
   margin: 1rem 0 0;
 }
+
+
+/* Columna extra en la tabla del laboratorio de caché */
+.sw-tabla table {
+  min-width: 34rem;
+}

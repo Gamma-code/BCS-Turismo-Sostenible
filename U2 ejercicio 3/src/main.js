@@ -7,6 +7,7 @@ import MiListaView from "./views/MiListaView.js";
 import ServiceWorkerView from "./views/ServiceWorkerView.js";
 import DestinoCard from "./components/DestinoCard.js";
 import { registerServiceWorker } from "./pwa/registerSW.js";
+import { initEstadoConexion } from "./pwa/estadoConexion.js";
 import CacheLabView from "./views/CacheLabView.js";
 import { initTheme, toggleTheme } from "./services/themeService.js";
 import { registrarVisita } from "./services/visitasService.js";
@@ -33,6 +34,8 @@ const router = new Router(routes, app);
 
 
 initTheme();
+
+initEstadoConexion();
 
 registrarVisita();
 

@@ -1,12 +1,16 @@
 import { BASE_PATH, API_URL } from "../config.js";
 
-const ARCHIVO_PROPIO = `${BASE_PATH}/data/aviso.json`;
+const AVISO_LOCAL = `${BASE_PATH}/data/aviso.json`;
+const ESTADO_LOCAL = `${BASE_PATH}/data/estado-destinos.json`;
+const API_DESTINOS = `${API_URL}/destinos`;
 const API_CLIMA = "https://api.open-meteo.com/v1/forecast?latitude=24.14&longitude=-110.31&current_weather=true";
 const MAX_LOG = 25;
 
 const ETIQUETAS = {
   cache: `<span class="sw-ok">Caché (HIT)</span>`,
   red: "Red (MISS)",
+  actualizada: `<span class="sw-ok">Caché actualizada por detrás</span>`,
+  emergencia: `<span class="sw-no">Respuesta de emergencia (503)</span>`,
   ignorada: `<small>Ignorada (el SW no responde)</small>`,
 };
 
@@ -19,11 +23,12 @@ function htmlRegistro() {
 
   const filas = registro
     .map(
-      ({ hora, method, ruta, origen }) => `
+      ({ hora, method, ruta, estrategia, origen }) => `
         <tr>
           <td>${hora}</td>
           <td>${method}</td>
           <td><small><code>${ruta}</code></small></td>
+          <td><small>${estrategia ?? "—"}</small></td>
           <td>${ETIQUETAS[origen] ?? origen}</td>
         </tr>
       `
@@ -34,7 +39,7 @@ function htmlRegistro() {
     <div class="sw-tabla">
       <table class="storage-table">
         <thead>
-          <tr><th>Hora</th><th>Método</th><th>Recurso</th><th>Resultado</th></tr>
+          <tr><th>Hora</th><th>Método</th><th>Recurso</th><th>Estrategia</th><th>Resultado</th></tr>
         </thead>
         <tbody>${filas}</tbody>
       </table>
@@ -152,10 +157,14 @@ document.addEventListener("click", async (event) => {
 
   const accion = boton.dataset.labAction;
 
-  if (accion === "archivo-propio") {
-    await pedir("GET archivo propio", ARCHIVO_PROPIO);
+  if (accion === "aviso-local") {
+    await pedir("GET aviso.json (SWR)", AVISO_LOCAL);
+  } else if (accion === "estado-local") {
+    await pedir("GET estado-destinos.json (Network First)", ESTADO_LOCAL);
+  } else if (accion === "api-destinos") {
+    await pedir("GET destinos (Network First)", API_DESTINOS);
   } else if (accion === "api-clima") {
-    await pedir("GET API del clima", API_CLIMA);
+    await pedir("GET clima (Network First)", API_CLIMA);
   } else if (accion === "post-api") {
     await pedir("POST a nuestra API", `${API_URL}/destinos`, {
       method: "POST",
@@ -178,11 +187,13 @@ export default async function CacheLabView() {
   return `
     <div class="card">
       <h2>Caché y peticiones</h2>
-      <p>Cada botón hace una petición distinta. Fíjate cuáles atiende el
-      Service Worker y cuáles deja pasar a la red.</p>
+      <p>Cada botón hace una petición distinta. Fíjate qué estrategia aplica
+      el Service Worker en cada caso y de dónde sale la respuesta.</p>
       <div class="storage-actions">
-        <button type="button" data-lab-action="archivo-propio">GET archivo propio</button>
-        <button type="button" data-lab-action="api-clima" class="btn-secundario">GET API del clima</button>
+        <button type="button" data-lab-action="estado-local">GET estado-destinos.json</button>
+        <button type="button" data-lab-action="aviso-local" class="btn-secundario">GET aviso.json</button>
+        <button type="button" data-lab-action="api-destinos" class="btn-secundario">GET destinos</button>
+        <button type="button" data-lab-action="api-clima" class="btn-secundario">GET clima</button>
         <button type="button" data-lab-action="post-api" class="btn-secundario">POST a nuestra API</button>
       </div>
       <pre id="lab-result" class="sw-result"></pre>
