@@ -1,0 +1,44 @@
+{
+  "name": "BCS Turismo Sostenible",
+  "short_name": "BCS Turismo",
+  "description": "Guía de destinos de turismo sostenible en Baja California Sur, con clima y lista de viaje que funciona sin conexión.",
+  "lang": "es-MX",
+  "dir": "ltr",
+  "id": "/BCS-Turismo-Sostenible/U2%20ejercicio%203/",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "categories": [
+    "travel",
+    "education"
+  ],
+  "theme_color": "#0a3b47",
+  "background_color": "#f2f4f3",
+  "icons": [
+    {
+      "src": "iconos/manifest-icon-192.maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "iconos/manifest-icon-192.maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "iconos/manifest-icon-512.maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "iconos/manifest-icon-512.maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

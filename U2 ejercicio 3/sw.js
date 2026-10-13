@@ -1,4 +1,4 @@
-const CACHE_VERSION = "bcs-app-shell-v3";
+const CACHE_VERSION = "bcs-app-shell-v4";
 
 const CDN_ORIGIN = "https://cdn.jsdelivr.net";
 const API_ORIGIN = "https://bcs-turismo-api.onrender.com";
@@ -40,6 +40,12 @@ const APP_SHELL = [
   "src/utils/slugify.js",
   "data/aviso.json",
   "data/estado-destinos.json",
+  "manifest.json",
+  "iconos/manifest-icon-192.maskable.png",
+  "iconos/manifest-icon-512.maskable.png",
+  "iconos/apple-icon-180.png",
+  "iconos/favicon-196.png",
+  "iconos/favicon-32.png",
 ];
 
 const EXTERNOS = [`${CDN_ORIGIN}/npm/idb@8/+esm`];
