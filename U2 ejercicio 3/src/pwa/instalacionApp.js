@@ -59,5 +59,5 @@ export function mensajeDeAyuda() {
   if (estaInstalada()) return "Ya estás usando la app instalada.";
   if (sePuedeInstalar()) return "Tu navegador puede instalarla: usa el botón «Instalar app».";
   if (esIOS()) return "En iPhone o iPad: botón Compartir → «Agregar a pantalla de inicio».";
-  return "Este navegador no ofrece instalar la app, pero puedes seguir usándola normal desde aquí.";
+  return "No hay instalación disponible: puede que la app ya esté instalada o que este navegador no la ofrezca. Puedes seguir usándola normal desde aquí.";
 }
