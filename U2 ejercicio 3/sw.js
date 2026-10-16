@@ -1,4 +1,4 @@
-const CACHE_VERSION = "bcs-app-shell-v5";
+const CACHE_VERSION = "bcs-app-shell-v6";
 
 const CDN_ORIGIN = "https://cdn.jsdelivr.net";
 const API_ORIGIN = "https://bcs-turismo-api.onrender.com";

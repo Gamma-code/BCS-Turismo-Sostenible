@@ -4,6 +4,7 @@ import {
   estaInstalada,
   esIOS,
   mensajeDeAyuda,
+  alCambiarModo,
 } from "./instalacionApp.js";
 
 const boton = () => document.getElementById("boton-instalar");
@@ -30,6 +31,8 @@ function pintar() {
 export function initBotonInstalar() {
   pintar();
   window.addEventListener("cambio-instalacion", pintar);
+  window.addEventListener("cambio-instalacion", pintar);
+  alCambiarModo(pintar);
 
   boton()?.addEventListener("click", async () => {
     await pedirInstalacion();

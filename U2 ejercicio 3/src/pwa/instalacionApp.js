@@ -44,6 +44,12 @@ export function estaInstalada() {
   return MODOS_INSTALADA.some((modo) => window.matchMedia(`(display-mode: ${modo})`).matches);
 }
 
+export function alCambiarModo(callback) {
+  MODOS_INSTALADA.forEach((modo) =>
+    window.matchMedia(`(display-mode: ${modo})`).addEventListener("change", callback)
+  );
+}
+
 export function esIOS() {
   const ua = navigator.userAgent;
   return /iphone|ipad|ipod/i.test(ua) || (/macintosh/i.test(ua) && navigator.maxTouchPoints > 1);
