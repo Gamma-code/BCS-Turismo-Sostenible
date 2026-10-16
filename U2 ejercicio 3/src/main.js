@@ -8,6 +8,8 @@ import ServiceWorkerView from "./views/ServiceWorkerView.js";
 import DestinoCard from "./components/DestinoCard.js";
 import { registerServiceWorker } from "./pwa/registerSW.js";
 import { initEstadoConexion } from "./pwa/estadoConexion.js";
+import { initInstalacion } from "./pwa/instalacionApp.js";
+import { initBotonInstalar } from "./pwa/botonInstalar.js";
 import CacheLabView from "./views/CacheLabView.js";
 import { initTheme, toggleTheme } from "./services/themeService.js";
 import { registrarVisita } from "./services/visitasService.js";
@@ -36,6 +38,10 @@ const router = new Router(routes, app);
 initTheme();
 
 initEstadoConexion();
+
+initInstalacion();
+
+initBotonInstalar();
 
 registrarVisita();
 

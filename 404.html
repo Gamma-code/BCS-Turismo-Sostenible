@@ -4,6 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BCS Turismo Sostenible</title>
+  <link rel="manifest" href="/BCS-Turismo-Sostenible/U2%20ejercicio%203/manifest.json" />
+  <meta name="theme-color" content="#0a3b47" />
+  <meta name="apple-mobile-web-app-title" content="BCS Turismo" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/BCS-Turismo-Sostenible/U2%20ejercicio%203/iconos/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="196x196" href="/BCS-Turismo-Sostenible/U2%20ejercicio%203/iconos/favicon-196.png" />
+  <link rel="apple-touch-icon" href="/BCS-Turismo-Sostenible/U2%20ejercicio%203/iconos/apple-icon-180.png" />
   <link rel="stylesheet" href="/BCS-Turismo-Sostenible/U2%20ejercicio%203/styles/shell.css" />
   <link rel="stylesheet" href="/BCS-Turismo-Sostenible/U2%20ejercicio%203/styles/main.css" />
   <script>
@@ -20,6 +28,8 @@
 <body>
   <header>
     <h1>BCS Turismo Sostenible <span id="estado-conexion" class="estado-conexion">En línea</span></h1>
+    <button type="button" id="boton-instalar" class="boton-instalar" hidden>Instalar app</button>
+    <p id="aviso-instalar" class="aviso-instalar" hidden></p>
     <nav>
      <a href="/BCS-Turismo-Sostenible/U2 ejercicio 3" data-link>Inicio</a>
      <a href="/BCS-Turismo-Sostenible/U2 ejercicio 3/acerca" data-link>Acerca de</a>

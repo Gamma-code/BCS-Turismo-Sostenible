@@ -1,4 +1,4 @@
-const CACHE_VERSION = "bcs-app-shell-v4";
+const CACHE_VERSION = "bcs-app-shell-v5";
 
 const CDN_ORIGIN = "https://cdn.jsdelivr.net";
 const API_ORIGIN = "https://bcs-turismo-api.onrender.com";
@@ -22,6 +22,8 @@ const APP_SHELL = [
   "src/components/DestinoCard.js",
   "src/pwa/registerSW.js",
   "src/pwa/estadoConexion.js",
+  "src/pwa/instalacionApp.js",
+  "src/pwa/botonInstalar.js",
   "src/views/HomeView.js",
   "src/views/AboutView.js",
   "src/views/DestinoDetailView.js",
