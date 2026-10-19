@@ -1,4 +1,4 @@
-const CACHE_VERSION = "bcs-app-shell-v7";
+const CACHE_VERSION = "bcs-app-shell-v8";
 
 const CDN_ORIGIN = "https://cdn.jsdelivr.net";
 const API_ORIGIN = "https://bcs-turismo-api.onrender.com";
@@ -9,6 +9,17 @@ const ORIGENES_PERMITIDOS = [
   API_ORIGIN,
   CLIMA_ORIGIN,
 ];
+
+try {
+  importScripts(`${CDN_ORIGIN}/npm/idb@8/build/umd.js`);
+} catch (error) {
+  console.warn("[SW] No se pudo cargar idb, el sync no podrá vaciar la cola:", error);
+}
+
+const SYNC_TAG = "bcs-reportes-pendientes";
+const DB_NOMBRE = "bcs_turismo_db";
+const STORE_PENDIENTES = "reportes_pendientes";
+const REPORTES_ENDPOINT = "https://jsonplaceholder.typicode.com/posts";
 
 const APP_SHELL = [
   "./",
@@ -24,6 +35,7 @@ const APP_SHELL = [
   "src/pwa/estadoConexion.js",
   "src/pwa/instalacionApp.js",
   "src/pwa/botonInstalar.js",
+  "src/pwa/sincronizacion.js",
   "src/views/HomeView.js",
   "src/views/AboutView.js",
   "src/views/DestinoDetailView.js",
@@ -31,6 +43,7 @@ const APP_SHELL = [
   "src/views/MiListaView.js",
   "src/views/ServiceWorkerView.js",
   "src/views/CacheLabView.js",
+  "src/views/ReportesView.js",
   "src/views/NotFoundView.js",
   "src/services/destinosData.js",
   "src/services/destinosService.js",
@@ -299,5 +312,55 @@ function avisarALaApp(request, origen, estrategia) {
         origen,
       })
     );
+  });
+}
+
+self.addEventListener("sync", (event) => {
+  if (event.tag !== SYNC_TAG) return;
+
+  console.log("[SW] sync =>", event.tag, "· lastChance:", event.lastChance);
+
+  event.waitUntil(vaciarCola());
+});
+
+async function vaciarCola() {
+  if (typeof idb === "undefined") {
+    throw new Error("idb no está cargado, se reintentará después");
+  }
+
+  const db = await idb.openDB(DB_NOMBRE);
+
+  try {
+    const pendientes = await db.getAll(STORE_PENDIENTES);
+    console.log("[SW] Cola de reportes =>", pendientes.length, "pendiente(s)");
+
+    for (const item of pendientes) {
+      const respuesta = await fetch(REPORTES_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(item.reporte),
+      });
+
+      if (!respuesta.ok) throw new Error(`HTTP ${respuesta.status}`);
+
+      // Se borra de la cola solo despues de que el servidor confirma
+      const datos = await respuesta.json();
+      await db.delete(STORE_PENDIENTES, item.id);
+      console.log("[SW] Reporte enviado y sacado de la cola =>", item.reporte.destino);
+
+      notificarClientes({
+        type: "REPORTE_ENVIADO",
+        destino: item.reporte.destino,
+        idServidor: datos.id,
+      });
+    }
+  } finally {
+    db.close();
+  }
+}
+
+function notificarClientes(mensaje) {
+  self.clients.matchAll({ type: "window" }).then((clientes) => {
+    clientes.forEach((cliente) => cliente.postMessage(mensaje));
   });
 }

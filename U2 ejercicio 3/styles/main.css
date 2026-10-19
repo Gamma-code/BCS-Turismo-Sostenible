@@ -439,3 +439,17 @@ pre.sw-result {
 .sw-tabla table {
   min-width: 34rem;
 }
+
+/*Reporte de incidencias*/
+.guardado-form textarea {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  margin-top: 0.3rem;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radius);
+  background: var(--color-card-bg);
+  color: var(--color-text);
+  font-family: inherit;
+  font-size: 0.95rem;
+  resize: vertical;
+}

@@ -10,6 +10,8 @@ import { registerServiceWorker } from "./pwa/registerSW.js";
 import { initEstadoConexion } from "./pwa/estadoConexion.js";
 import { initInstalacion } from "./pwa/instalacionApp.js";
 import { initBotonInstalar } from "./pwa/botonInstalar.js";
+import { initSincronizacion } from "./pwa/sincronizacion.js";
+import ReportesView from "./views/ReportesView.js";
 import CacheLabView from "./views/CacheLabView.js";
 import { initTheme, toggleTheme } from "./services/themeService.js";
 import { registrarVisita } from "./services/visitasService.js";
@@ -28,6 +30,7 @@ const routes = [
   { path: "/mi-lista", view: MiListaView },
   { path: "/service-worker", view: ServiceWorkerView },
   { path: "/cache", view: CacheLabView },
+  { path: "/reportes", view: ReportesView },
 ];
 
 
@@ -42,6 +45,8 @@ initEstadoConexion();
 initInstalacion();
 
 initBotonInstalar();
+
+initSincronizacion();
 
 registrarVisita();
 
