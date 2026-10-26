@@ -12,6 +12,7 @@ import { initInstalacion } from "./pwa/instalacionApp.js";
 import { initBotonInstalar } from "./pwa/botonInstalar.js";
 import { initSincronizacion } from "./pwa/sincronizacion.js";
 import ReportesView from "./views/ReportesView.js";
+import CercaDeMiView from "./views/CercaDeMiView.js";
 import CacheLabView from "./views/CacheLabView.js";
 import { initTheme, toggleTheme } from "./services/themeService.js";
 import { registrarVisita } from "./services/visitasService.js";
@@ -31,6 +32,7 @@ const routes = [
   { path: "/service-worker", view: ServiceWorkerView },
   { path: "/cache", view: CacheLabView },
   { path: "/reportes", view: ReportesView },
+  { path: "/cerca", view: CercaDeMiView },
 ];
 
 

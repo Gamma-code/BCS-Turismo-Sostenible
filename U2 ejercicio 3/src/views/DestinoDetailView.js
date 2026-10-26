@@ -1,5 +1,34 @@
 // Muestra el detalle de un destino y, además su clima actual
 
+import { BASE_PATH } from "../config.js";
+import { compartir, haySoporteDeCompartir } from "../services/compartirService.js";
+
+// El botón de compartir se conecta una sola vez, al cargar el módulo
+document.addEventListener("click", async (event) => {
+  const boton = event.target.closest("[data-compartir]");
+  if (!boton) return;
+
+  const aviso = document.getElementById("compartir-aviso");
+  const datos = {
+    title: boton.dataset.titulo,
+    text: boton.dataset.texto,
+    url: boton.dataset.url,
+  };
+
+  const resultado = await compartir(datos);
+
+  const mensajes = {
+    nativo: "Compartido.",
+    cancelado: "Cancelaste el menú de compartir.",
+    portapapeles: "Tu navegador no tiene menú para compartir, así que copiamos la ficha al portapapeles.",
+    manual: "No se pudo compartir ni copiar. Copia la dirección de la barra a mano.",
+  };
+
+  if (aviso) aviso.textContent = mensajes[resultado] ?? "";
+});
+
+
+
 export default async function DestinoDetailView(params) {
   const { default: DestinosService } = await import(
     "../services/destinosService.js"
@@ -70,6 +99,20 @@ export default async function DestinoDetailView(params) {
       <p><strong>Horario recomendado:</strong> ${destino.horario}</p>
       <p><strong>Recomendación sostenible:</strong> ${destino.recomendacion}</p>
       ${climaHTML}
+
+      <div class="storage-actions">
+        <button
+          type="button"
+          data-compartir
+          data-titulo="${destino.title}"
+          data-texto="${destino.meta} en ${destino.ubicacion}"
+          data-url="${new URL(`${BASE_PATH}/destino/${destino.id}`, window.location.origin).href}"
+        >Compartir este destino</button>
+      </div>
+      <p id="compartir-aviso" class="sw-result">${
+        haySoporteDeCompartir() ? "" : "Este navegador no tiene menú nativo para compartir: se copiará al portapapeles."
+      }</p>
+
       <a href="/" data-link>← Volver al listado</a>
     </article>
   `;

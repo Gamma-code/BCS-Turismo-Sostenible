@@ -1,4 +1,4 @@
-const CACHE_VERSION = "bcs-app-shell-v8";
+const CACHE_VERSION = "bcs-app-shell-v10";
 
 const CDN_ORIGIN = "https://cdn.jsdelivr.net";
 const API_ORIGIN = "https://bcs-turismo-api.onrender.com";
@@ -44,6 +44,7 @@ const APP_SHELL = [
   "src/views/ServiceWorkerView.js",
   "src/views/CacheLabView.js",
   "src/views/ReportesView.js",
+  "src/views/CercaDeMiView.js",
   "src/views/NotFoundView.js",
   "src/services/destinosData.js",
   "src/services/destinosService.js",
@@ -52,7 +53,10 @@ const APP_SHELL = [
   "src/services/themeService.js",
   "src/services/visitasService.js",
   "src/services/dbService.js",
+  "src/services/ubicacionService.js",
+  "src/services/compartirService.js",
   "src/utils/slugify.js",
+  "src/utils/distancia.js",
   "data/aviso.json",
   "data/estado-destinos.json",
   "manifest.json",
