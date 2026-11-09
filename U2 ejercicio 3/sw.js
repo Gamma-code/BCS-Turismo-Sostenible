@@ -1,4 +1,4 @@
-const CACHE_VERSION = "bcs-app-shell-v10";
+const CACHE_VERSION = "bcs-app-shell-v11";
 
 const CDN_ORIGIN = "https://cdn.jsdelivr.net";
 const API_ORIGIN = "https://bcs-turismo-api.onrender.com";
@@ -20,6 +20,9 @@ const SYNC_TAG = "bcs-reportes-pendientes";
 const DB_NOMBRE = "bcs_turismo_db";
 const STORE_PENDIENTES = "reportes_pendientes";
 const REPORTES_ENDPOINT = "https://jsonplaceholder.typicode.com/posts";
+const ICONO_AVISO = new URL("iconos/manifest-icon-192.maskable.png", self.location).href;
+const RUTA_REPORTES = new URL("reportes", self.location).href;
+const TAG_AVISO = "bcs-reportes-sincronizados";
 
 const APP_SHELL = [
   "./",
@@ -36,6 +39,7 @@ const APP_SHELL = [
   "src/pwa/instalacionApp.js",
   "src/pwa/botonInstalar.js",
   "src/pwa/sincronizacion.js",
+  "src/pwa/notificaciones.js",
   "src/views/HomeView.js",
   "src/views/AboutView.js",
   "src/views/DestinoDetailView.js",
@@ -195,7 +199,6 @@ async function cacheFirst(event, cache, clave) {
   try {
     const respuesta = await desdeLaRed(request);
 
-
     if (respuesta.ok) {
       event.waitUntil(cache.put(clave, respuesta.clone()));
     }
@@ -337,6 +340,7 @@ async function vaciarCola() {
   try {
     const pendientes = await db.getAll(STORE_PENDIENTES);
     console.log("[SW] Cola de reportes =>", pendientes.length, "pendiente(s)");
+    let enviados = 0;
 
     for (const item of pendientes) {
       const respuesta = await fetch(REPORTES_ENDPOINT, {
@@ -357,7 +361,11 @@ async function vaciarCola() {
         destino: item.reporte.destino,
         idServidor: datos.id,
       });
+
+      enviados++;
     }
+
+    if (enviados > 0) await avisarSincronizacion(enviados);
   } finally {
     db.close();
   }
@@ -367,4 +375,54 @@ function notificarClientes(mensaje) {
   self.clients.matchAll({ type: "window" }).then((clientes) => {
     clientes.forEach((cliente) => cliente.postMessage(mensaje));
   });
+}
+
+// la cola de reportes terminó de sincronizarse
+async function avisarSincronizacion(cuantos) {
+  if (Notification.permission !== "granted") return;
+
+  try {
+    await self.registration.showNotification("Reportes enviados", {
+      body:
+        cuantos === 1
+          ? "Tu reporte pendiente ya se envió al servidor."
+          : `Tus ${cuantos} reportes pendientes ya se enviaron al servidor.`,
+      icon: ICONO_AVISO,
+      badge: ICONO_AVISO,
+      tag: TAG_AVISO,
+      data: { url: RUTA_REPORTES },
+    });
+    console.log("[SW] Notificación mostrada =>", TAG_AVISO);
+  } catch (error) {
+    // Si el aviso falla no importa, los reportes ya se enviaron y la cola se vacio
+    console.warn("[SW] No se pudo mostrar la notificación:", error);
+  }
+}
+
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+
+  const destino = event.notification.data?.url ?? self.location.origin;
+  console.log("[SW] notificationclick =>", destino);
+
+  event.waitUntil(abrirOEnfocar(destino));
+});
+
+async function abrirOEnfocar(url) {
+  const ventanas = await self.clients.matchAll({
+    type: "window",
+    includeUncontrolled: true,
+  });
+
+  const raiz = new URL("./", self.location).href;
+
+  for (const ventana of ventanas) {
+    if (ventana.url.startsWith(raiz)) {
+      await ventana.focus();
+      if ("navigate" in ventana) await ventana.navigate(url);
+      return;
+    }
+  }
+
+  await self.clients.openWindow(url);
 }

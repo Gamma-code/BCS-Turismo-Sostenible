@@ -11,6 +11,7 @@ import { initEstadoConexion } from "./pwa/estadoConexion.js";
 import { initInstalacion } from "./pwa/instalacionApp.js";
 import { initBotonInstalar } from "./pwa/botonInstalar.js";
 import { initSincronizacion } from "./pwa/sincronizacion.js";
+import { initNotificaciones } from "./pwa/notificaciones.js";
 import ReportesView from "./views/ReportesView.js";
 import CercaDeMiView from "./views/CercaDeMiView.js";
 import CacheLabView from "./views/CacheLabView.js";
@@ -49,6 +50,8 @@ initInstalacion();
 initBotonInstalar();
 
 initSincronizacion();
+
+initNotificaciones();
 
 registrarVisita();
 
