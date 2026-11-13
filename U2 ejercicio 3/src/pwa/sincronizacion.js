@@ -1,7 +1,9 @@
 import { agregarPendiente, getPendientes, eliminarPendiente } from "../services/dbService.js";
+import { getUsuarioId } from "../services/usuarioService.js";
+import { API_URL } from "../config.js";
 
 export const SYNC_TAG = "bcs-reportes-pendientes";
-const ENDPOINT = "https://jsonplaceholder.typicode.com/posts";
+const ENDPOINT = `${API_URL}/reportes`;
 
 
 const FORZAR_PLAN_B = new URLSearchParams(window.location.search).has("sin-sync");
@@ -34,7 +36,12 @@ export function getEnviados() {
 
 // El reporte SIEMPRE se guarda en la cola antes de intentar mandarlo
 export async function encolarReporte(reporte) {
-  await agregarPendiente({ reporte, creadoEn: new Date().toISOString() });
+  // El usuarioId se guarda aquí porque el Service Worker no puede leer
+  // localStorage cuando vacía la cola
+  await agregarPendiente({
+    reporte: { ...reporte, usuarioId: getUsuarioId() },
+    creadoEn: new Date().toISOString(),
+  });
   avisar();
   return pedirSync();
 }

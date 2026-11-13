@@ -1,4 +1,4 @@
-const CACHE_VERSION = "bcs-app-shell-v11";
+const CACHE_VERSION = "bcs-app-shell-v12";
 
 const CDN_ORIGIN = "https://cdn.jsdelivr.net";
 const API_ORIGIN = "https://bcs-turismo-api.onrender.com";
@@ -19,10 +19,11 @@ try {
 const SYNC_TAG = "bcs-reportes-pendientes";
 const DB_NOMBRE = "bcs_turismo_db";
 const STORE_PENDIENTES = "reportes_pendientes";
-const REPORTES_ENDPOINT = "https://jsonplaceholder.typicode.com/posts";
+const REPORTES_ENDPOINT = `${API_ORIGIN}/api/reportes`;
 const ICONO_AVISO = new URL("iconos/manifest-icon-192.maskable.png", self.location).href;
 const RUTA_REPORTES = new URL("reportes", self.location).href;
 const TAG_AVISO = "bcs-reportes-sincronizados";
+const TAG_PUSH = "bcs-push";
 
 const APP_SHELL = [
   "./",
@@ -40,6 +41,7 @@ const APP_SHELL = [
   "src/pwa/botonInstalar.js",
   "src/pwa/sincronizacion.js",
   "src/pwa/notificaciones.js",
+  "src/pwa/suscripcionPush.js",
   "src/views/HomeView.js",
   "src/views/AboutView.js",
   "src/views/DestinoDetailView.js",
@@ -57,6 +59,7 @@ const APP_SHELL = [
   "src/services/themeService.js",
   "src/services/visitasService.js",
   "src/services/dbService.js",
+  "src/services/usuarioService.js",
   "src/services/ubicacionService.js",
   "src/services/compartirService.js",
   "src/utils/slugify.js",
@@ -137,7 +140,14 @@ self.addEventListener("activate", (event) => {
 function debeAtender(request) {
   if (request.method !== "GET") return false;
 
-  if (!ORIGENES_PERMITIDOS.includes(new URL(request.url).origin)) return false;
+  const url = new URL(request.url);
+
+  if (!ORIGENES_PERMITIDOS.includes(url.origin)) return false;
+
+  // El push y los reportes nunca pasan por el caché: la llave y las
+  // suscripciones tienen que venir siempre del servidor
+  if (url.pathname.startsWith("/api/push")) return false;
+  if (url.pathname.startsWith("/api/reportes")) return false;
 
   if (request.cache === "only-if-cached" && request.mode !== "same-origin")
     return false;
@@ -398,6 +408,41 @@ async function avisarSincronizacion(cuantos) {
     console.warn("[SW] No se pudo mostrar la notificación:", error);
   }
 }
+
+// Aviso que manda el backend aunque la app esté cerrada
+self.addEventListener("push", (event) => {
+  const datos = {
+    titulo: "BCS Turismo Sostenible",
+    cuerpo: "Tienes un aviso nuevo.",
+    url: "reportes",
+  };
+
+  if (event.data) {
+    try {
+      Object.assign(datos, event.data.json());
+    } catch (error) {
+      // Plan B: si no llegó como JSON se usa tal cual como texto
+      datos.cuerpo = event.data.text();
+    }
+  }
+
+  console.log("[SW] push =>", datos);
+
+  // Se le quita la diagonal del inicio para que la ruta se resuelva contra el
+  // scope del SW y siga funcionando bajo /BCS-Turismo-Sostenible/...
+  const ruta = String(datos.url ?? "reportes").replace(/^\/+/, "");
+  const destino = new URL(ruta, self.location).href;
+
+  event.waitUntil(
+    self.registration.showNotification(datos.titulo, {
+      body: datos.cuerpo,
+      icon: ICONO_AVISO,
+      badge: ICONO_AVISO,
+      tag: TAG_PUSH,
+      data: { url: destino },
+    })
+  );
+});
 
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();

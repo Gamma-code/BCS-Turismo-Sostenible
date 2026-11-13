@@ -6,6 +6,12 @@ import {
   haySoporteDeSync,
   getEnviados,
 } from "../pwa/sincronizacion.js";
+import {
+  haySoporteDePush,
+  getSuscripcion,
+  suscribir,
+  darDeBaja,
+} from "../pwa/suscripcionPush.js";
 
 const TIPOS = [
   "Basura acumulada",
@@ -70,6 +76,38 @@ function pintarEnviados() {
   `;
 }
 
+async function pintarPush() {
+  if (!haySoporteDePush()) {
+    return `<p class="sw-no">✘ Este navegador no soporta Push.</p>`;
+  }
+
+  const suscripcion = await getSuscripcion();
+
+  if (suscripcion) {
+    return `
+      <p class="sw-ok">✔ Estás suscrito a los avisos del servidor.</p>
+      <div class="storage-actions">
+        <button type="button" data-push-accion="baja" class="btn-secundario">Darme de baja</button>
+      </div>`;
+  }
+
+  return `
+    <p>
+      No estás suscrito. Si te suscribes, el servidor te avisa cuando alguien
+      registre un reporte nuevo, aunque tengas la app cerrada.
+    </p>
+    <div class="storage-actions">
+      <button type="button" data-push-accion="alta">Suscribirme a los avisos</button>
+    </div>`;
+}
+
+async function actualizarPush() {
+  const caja = document.getElementById("reporte-push");
+  if (!caja) return;
+
+  caja.innerHTML = await pintarPush();
+}
+
 async function actualizarPaneles() {
   const cajaCola = document.getElementById("reporte-cola");
   const cajaEnviados = document.getElementById("reporte-enviados");
@@ -123,6 +161,33 @@ document.addEventListener("click", async (event) => {
   }
 });
 
+document.addEventListener("click", async (event) => {
+  const boton = event.target.closest("[data-push-accion]");
+  if (!boton) return;
+
+  const estado = document.getElementById("push-estado");
+  const alta = boton.dataset.pushAccion === "alta";
+
+  boton.disabled = true;
+  if (estado) estado.textContent = alta ? "Suscribiendo..." : "Dando de baja...";
+
+  try {
+    if (alta) {
+      await suscribir();
+      if (estado) estado.textContent = "Listo, ya estás suscrito.";
+    } else {
+      await darDeBaja();
+      if (estado) estado.textContent = "Te diste de baja de los avisos.";
+    }
+
+    await actualizarPush();
+  } catch (error) {
+    console.error("[PUSH]", error);
+    if (estado) estado.textContent = `No se pudo: ${error.message}`;
+    boton.disabled = false;
+  }
+});
+
 export default async function ReportesView() {
   const pendientes = await getPendientes();
 
@@ -161,6 +226,12 @@ export default async function ReportesView() {
         </div>
       </form>
       <p id="reporte-estado" class="sw-result"></p>
+    </div>
+
+    <div class="card">
+      <h3>Avisos del servidor (Push)</h3>
+      <div id="reporte-push">${await pintarPush()}</div>
+      <p id="push-estado" class="sw-result"></p>
     </div>
 
     <div class="card">
