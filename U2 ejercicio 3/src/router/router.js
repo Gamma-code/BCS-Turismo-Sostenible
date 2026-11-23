@@ -87,17 +87,20 @@ export default class Router {
       return;
     }
 
-    // skeleton 
+    // El esqueleto imita la forma real del contenido (portada + rejilla de
+    // tarjetas) para que al llegar la vista no empuje el pie de página
     this.root.innerHTML = `
-      <div class="skeleton">
-        <div class="skeleton-line"></div>
-        <div class="skeleton-line"></div>
-        <div class="skeleton-line short"></div>
+      <div class="skeleton" aria-hidden="true">
+        <div class="skeleton-portada"></div>
+        <div class="skeleton-grid">
+          ${'<div class="skeleton-card"></div>'.repeat(6)}
+        </div>
       </div>
     `;
 
-    await new Promise((r) => setTimeout(r, 200));
-    const html = await match.route.view(match.params);
+    // La ruta entrega una función que importa su vista; se descarga aquí
+    const modulo = await match.route.view();
+    const html = await modulo.default(match.params);
     this.root.innerHTML = html;
     document.title = `BCS Turismo Sostenible — ${path}`;
   }

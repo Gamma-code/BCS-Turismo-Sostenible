@@ -18,11 +18,32 @@ export function filtrarDestinos(termino) {
   );
 }
 
-export default async function HomeView() {
+// Vuelve a pintar solo las tarjetas, sin tocar el resto de la página
+function repintarGrid(filtro) {
+  const grid = document.getElementById("destinos-grid");
+  if (!grid) return;
+
+  const lista = filtrarDestinos(filtro);
+  grid.innerHTML = lista.length
+    ? lista.map((destino) => DestinoCard(destino)).join("")
+    : `<p class="sin-resultados">No hay destinos que coincidan con "${filtro}".</p>`;
+}
+
+export default function HomeView() {
   const filtroGuardado = sessionStorageSafe.get(FILTRO_KEY) ?? "";
 
   const service = new DestinosService();
-  destinosCargados = await service.getAll();
+
+  // Se pinta de inmediato con los datos que ya trae la app, sin esperar al
+  // backend. Antes esto aguardaba hasta 8 segundos a que Render despertara.
+  destinosCargados = service.obtenerLocales();
+
+  // El backend se consulta por detrás y solo se repinta si trae algo distinto
+  service.revalidar().then((frescos) => {
+    if (!frescos || frescos.length === 0) return;
+    destinosCargados = frescos;
+    repintarGrid(filtroGuardado);
+  });
 
   const destinosFiltrados = filtrarDestinos(filtroGuardado);
 

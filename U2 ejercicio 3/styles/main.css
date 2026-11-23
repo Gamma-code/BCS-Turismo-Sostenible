@@ -114,7 +114,7 @@
 }
 
 .card a {
-  color: var(--mar-turquesa);
+  color: var(--enlace-tarjeta);
   font-weight: 700;
   font-size: 0.9rem;
   text-decoration: none;
@@ -125,7 +125,7 @@
 }
 
 .card a:hover {
-  border-bottom-color: var(--mar-turquesa);
+  border-bottom-color: var(--enlace-tarjeta);
 }
 
 .sin-resultados {

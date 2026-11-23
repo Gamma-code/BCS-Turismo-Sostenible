@@ -24,6 +24,23 @@ async function pedirAlBackend(ruta) {
 }
 
 export default class DestinosService {
+  // Los destinos ya vienen dentro de la app, así que se pueden pintar al
+  // instante sin esperar al backend
+  obtenerLocales() {
+    return DESTINOS;
+  }
+
+  // Y por detrás se comprueba si el backend trae algo distinto.
+  // Es el mismo Stale-While-Revalidate que el Service Worker usa para el aviso.
+  async revalidar() {
+    try {
+      return await pedirAlBackend("/destinos");
+    } catch (error) {
+      console.warn("Backend no disponible, se quedan los datos locales:", error.message);
+      return null;
+    }
+  }
+
   async getAll() {
     try {
       return await pedirAlBackend("/destinos");
